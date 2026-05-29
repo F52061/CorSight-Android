@@ -5,21 +5,30 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+<<<<<<< HEAD
 import android.net.Uri
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.GridLayout
+<<<<<<< HEAD
 import android.widget.ImageView
 import android.widget.LinearLayout
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+<<<<<<< HEAD
 import androidx.core.content.FileProvider
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -58,9 +67,12 @@ class DataCollectionActivity : AppCompatActivity() {
 
     private val LOCATION_PERMISSION = 200
     private val CAMERA_REQUEST = 201
+<<<<<<< HEAD
     private val RETAKE_REQUEST = 202
     private var pendingPhotoFile: File? = null
     private var retakeDirection: String? = null
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -197,6 +209,7 @@ class DataCollectionActivity : AppCompatActivity() {
             return
         }
 
+<<<<<<< HEAD
         val file = File(filesDir, "capture_${System.currentTimeMillis()}.jpg")
         pendingPhotoFile = file
 
@@ -210,16 +223,23 @@ class DataCollectionActivity : AppCompatActivity() {
             putExtra(MediaStore.EXTRA_OUTPUT, uri)
         }
 
+=======
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         if (intent.resolveActivity(packageManager) != null) {
             startActivityForResult(intent, CAMERA_REQUEST)
         } else {
             Toast.makeText(this, "相机不可用", Toast.LENGTH_SHORT).show()
+<<<<<<< HEAD
             pendingPhotoFile = null
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: android.content.Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+<<<<<<< HEAD
         if (resultCode != RESULT_OK) {
             pendingPhotoFile = null
             retakeDirection = null
@@ -260,6 +280,25 @@ class DataCollectionActivity : AppCompatActivity() {
                     val grid = dialog.findViewById<GridLayout>(R.id.previewGrid)
                     grid?.let { refreshPreviewGrid(it) }
                 }
+=======
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+            val bitmap = data?.extras?.get("data") as? android.graphics.Bitmap ?: return
+
+            val file = File(filesDir, "capture_${System.currentTimeMillis()}.jpg")
+            FileOutputStream(file).use { out ->
+                bitmap.compress(android.graphics.Bitmap.CompressFormat.JPEG, 95, out)
+            }
+
+            imagePaths.add(Pair(targetDirection, file.absolutePath))
+            capturedStatus[targetDirection] = true
+            updateGridColors()
+
+            if (imagePaths.size == 8) {
+                Toast.makeText(this, "一组采集完成", Toast.LENGTH_LONG).show()
+                saveCaptureTask()
+            } else {
+                switchTarget()
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             }
         }
     }
@@ -362,7 +401,10 @@ class DataCollectionActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             var successCount = 0
+<<<<<<< HEAD
             var lastErrorMsg = ""
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             for (task in tasks) {
                 val ok = uploadService.uploadTask(task)
                 if (ok) {
@@ -370,6 +412,7 @@ class DataCollectionActivity : AppCompatActivity() {
                     successCount++
                 } else {
                     taskStorage.updateStatus(task.pointId, "failed")
+<<<<<<< HEAD
                     lastErrorMsg = uploadService.lastError
                 }
             }
@@ -380,6 +423,13 @@ class DataCollectionActivity : AppCompatActivity() {
                     "上传 $successCount/${tasks.size}, 失败: $lastErrorMsg"
                 }
                 Toast.makeText(this@DataCollectionActivity, msg, Toast.LENGTH_LONG).show()
+=======
+                }
+            }
+            withContext(Dispatchers.Main) {
+                Toast.makeText(this@DataCollectionActivity,
+                    "上传 $successCount/${tasks.size}", Toast.LENGTH_LONG).show()
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
                 updateSyncButton()
             }
         }
@@ -441,6 +491,7 @@ class DataCollectionActivity : AppCompatActivity() {
         super.onDestroy()
         locationClient?.onDestroy()
     }
+<<<<<<< HEAD
 
     // ---------- 预览弹窗 ----------
 
@@ -542,4 +593,6 @@ class DataCollectionActivity : AppCompatActivity() {
             retakeDirection = null
         }
     }
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 }

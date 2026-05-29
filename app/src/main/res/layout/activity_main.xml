@@ -181,23 +181,230 @@
         android:id="@+id/container_pages"
         android:layout_width="0dp"
         android:layout_height="0dp"
+<<<<<<< HEAD
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/brand_bar"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+=======
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/page_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- 顶部：状态 + 语音按钮 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="?attr/colorPrimary"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/speech_hint"
+                    android:textColor="@color/white"
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:ellipsize="end" />
+
+                <Button
+                    android:id="@+id/btn_voice_input"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@color/purple_500"
+                    android:drawableTop="@drawable/ic_microphone"
+                    android:contentDescription="@string/speech_hint"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <!-- 搜索行 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:paddingHorizontal="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="4dp">
+
+                <EditText
+                    android:id="@+id/et_destination"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:layout_weight="1"
+                    android:hint="@string/destination_hint"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"
+                    android:paddingHorizontal="12dp"
+                    android:background="@drawable/edit_text_background"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/gray"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/btn_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:text="搜索"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="16dp"
+                    android:background="@color/orange"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
+
+            <!-- 地图面板（压缩高度） -->
+            <com.amap.api.maps.MapView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.35" />
+
+            <!-- 导航信息（导航时显示） -->
+            <LinearLayout
+                android:id="@+id/layout_nav_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp"
+                android:background="#CCFFFFFF"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_nav_distance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="0m" />
+
+                    <TextView
+                        android:id="@+id/tv_nav_duration"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:text="0分钟"
+                        android:gravity="end" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_nav_instruction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/gray"
+                    android:text=""
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- 底部快速操作区 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/btn_start_navigation"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="@string/start_navigation"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:background="@color/teal_200"
+                        android:paddingHorizontal="8dp" />
+
+                    <Button
+                        android:id="@+id/btn_preview_route"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="@string/preview_route"
+                        android:textColor="@color/white"
+                        android:textSize="14sp"
+                        android:background="@color/purple_500"
+                        android:paddingHorizontal="8dp"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_stop_tts"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:text="🔇 停止语音"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:background="@color/gray"
+                    android:layout_marginTop="8dp"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btn_vision_test"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="  🛡️  视觉避障检测"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:background="@color/vision_green"
+                    android:drawableStart="@drawable/ic_vision"
+                    android:drawablePadding="8dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center" />
+            </LinearLayout>
+
+        </LinearLayout>
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 
         <include
             android:id="@+id/page_history"
             layout="@layout/page_history"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="match_parent" />
+=======
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 
         <include
             android:id="@+id/page_settings"
             layout="@layout/page_settings"
             android:layout_width="match_parent"
+<<<<<<< HEAD
             android:layout_height="match_parent" />
+=======
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     </FrameLayout>
 
     <LinearLayout
@@ -316,9 +523,13 @@
         app:menu="@menu/menu_main_bottom"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextColor="@color/bottom_nav_color"
+<<<<<<< HEAD
         app:labelVisibilityMode="labeled"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+=======
+        app:labelVisibilityMode="labeled" />
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 
 </androidx.constraintlayout.widget.ConstraintLayout>

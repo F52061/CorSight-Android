@@ -83,15 +83,23 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="视觉避障检测"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
+=======
+            android:text="后端服务"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             android:layout_marginBottom="12dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="检测模型服务地址"
             android:textSize="14sp"
             android:textColor="?android:attr/textColorPrimary"
@@ -131,15 +139,55 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/colorControlHighlight"
+=======
+            android:text="服务地址"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/et_server_url"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:hint="https://xxx.ngrok-free.dev"
+            android:singleLine="true"
+            android:paddingHorizontal="12dp"
+            android:background="@drawable/edit_text_background"
+            android:textColor="@color/black"
+            android:textColorHint="@color/gray"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btn_save_url"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:text="保存地址"
+            android:textColor="@color/white"
+            android:background="@color/purple_500"
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             android:layout_marginVertical="24dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="其他"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
+=======
+            android:text="视觉辅助"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             android:layout_marginBottom="12dp"/>
 
         <LinearLayout
@@ -152,9 +200,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+<<<<<<< HEAD
                 android:text="外部设备优先"
                 android:textSize="14sp"
                 android:textColor="?android:attr/textColorPrimary" />
+=======
+                android:text="使用外设获取环境数据"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_use_external_device"
@@ -165,34 +219,107 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="开启后，视觉避障优先连接外设相机，找不到则回退本机相机"
             android:textSize="12sp"
             android:textColor="?android:attr/textColorSecondary"
+=======
+            android:text="开启后，视觉避障优先连接外设相机，找不到则退回本机相机"
+            android:textSize="12sp"
+            android:textColor="@color/gray"
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             android:layout_marginTop="4dp"
             android:layout_marginBottom="6dp"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+<<<<<<< HEAD
             android:background="?android:attr/colorControlHighlight"
+=======
+            android:background="@color/light_gray"
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             android:layout_marginVertical="24dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+<<<<<<< HEAD
             android:text="数据采集"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="?android:attr/textColorPrimary"
+=======
+            android:text="开发者工具"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             android:layout_marginBottom="12dp"/>
 
         <Button
             android:id="@+id/btn_data_collection"
             android:layout_width="match_parent"
             android:layout_height="44dp"
+<<<<<<< HEAD
             android:text="进入数据采集"
             android:textColor="@color/white"
             android:background="@color/teal_200"
+=======
+            android:text="数据采集"
+            android:textColor="@color/white"
+            android:background="@color/teal_200"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            android:layout_marginVertical="24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="高德 API Key"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tv_amap_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/gray"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="百度 App ID"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="7669507"
+            android:textSize="12sp"
+            android:textColor="@color/gray"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            android:layout_marginVertical="24dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="包名"
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
 

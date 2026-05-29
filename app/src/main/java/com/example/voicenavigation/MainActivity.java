@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+<<<<<<< HEAD
 import android.content.Context;
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -87,7 +90,10 @@ public class MainActivity extends AppCompatActivity implements
     private Button btnPreviewRoute;
     private Button btnVisionTest;
     private Button btnStopTts;
+<<<<<<< HEAD
     private ImageButton btnMyLocation;
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     private EditText etDestination;
     private ImageButton btnClearSearch;
     private CardView cardSuggestions;
@@ -152,7 +158,10 @@ public class MainActivity extends AppCompatActivity implements
         btnPreviewRoute = findViewById(R.id.btn_preview_route);
         btnVisionTest = findViewById(R.id.btn_vision_test);
         btnStopTts = findViewById(R.id.btn_stop_tts);
+<<<<<<< HEAD
         btnMyLocation = findViewById(R.id.btn_my_location);
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         etDestination = findViewById(R.id.et_destination);
         btnClearSearch = findViewById(R.id.btn_clear_search);
         cardSuggestions = findViewById(R.id.card_suggestions);
@@ -246,6 +255,19 @@ public class MainActivity extends AppCompatActivity implements
                 }
             }
         });
+<<<<<<< HEAD
+=======
+        btnStartNavigation.setOnClickListener(v -> toggleNavigation());
+        btnPreviewRoute.setOnClickListener(v -> sendTripPreview());
+        btnVisionTest.setOnClickListener(v ->
+            startActivity(new android.content.Intent(this, VisionTestActivity.class)));
+        btnStopTts.setOnClickListener(v -> {
+            if (baiduTts != null) {
+                baiduTts.stopPlayback();
+                btnStopTts.setVisibility(View.GONE);
+            }
+        });
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 
         // 清除按钮
         btnClearSearch.setOnClickListener(v -> {
@@ -388,7 +410,10 @@ public class MainActivity extends AppCompatActivity implements
         });
     }
 
+<<<<<<< HEAD
     private void loadSettings() {
+=======
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         EditText etServerUrl = pageSettingsView.findViewById(R.id.et_server_url);
         Button btnSaveUrl = pageSettingsView.findViewById(R.id.btn_save_url);
 
@@ -403,10 +428,21 @@ public class MainActivity extends AppCompatActivity implements
                 return;
             }
             prefs.edit().putString("server_base_url", url).apply();
+<<<<<<< HEAD
             tripPreviewService.setBaseUrl(url);
             Toast.makeText(this, "服务器地址已保存", Toast.LENGTH_SHORT).show();
         });
 
+=======
+
+            // 更新当前 service 实例的 baseUrl
+            tripPreviewService.setBaseUrl(url);
+
+            Toast.makeText(this, "服务器地址已保存", Toast.LENGTH_SHORT).show();
+        });
+
+        // 外设开关
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         SwitchCompat switchExternal = pageSettingsView.findViewById(R.id.switch_use_external_device);
         boolean useExternal = prefs.getBoolean("use_external_device", false);
         switchExternal.setChecked(useExternal);
@@ -415,6 +451,10 @@ public class MainActivity extends AppCompatActivity implements
             Toast.makeText(this, isChecked ? "已开启外设优先" : "已关闭外设优先", Toast.LENGTH_SHORT).show();
         });
 
+<<<<<<< HEAD
+=======
+        // 数据采集入口
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         Button btnDataCollection = pageSettingsView.findViewById(R.id.btn_data_collection);
         btnDataCollection.setOnClickListener(v -> {
             startActivity(new android.content.Intent(this, com.example.voicenavigation.collection.DataCollectionActivity.class));
@@ -473,12 +513,21 @@ public class MainActivity extends AppCompatActivity implements
 
     private void showStopTtsButton() {
         runOnUiThread(() -> {
+<<<<<<< HEAD
             if (btnStopTts != null) btnStopTts.setVisibility(View.VISIBLE);
         });
     }
 
     // ========== 地图 ==========
 
+=======
+            if (btnStopTts != null) {
+                btnStopTts.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     private void initMap() {
         if (mMap == null) return;
 
@@ -641,6 +690,13 @@ public class MainActivity extends AppCompatActivity implements
         navigationManager.planRoute(currentLocation, selectedDestLatLng, selectedDestName);
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * 发送行前预览请求：将用户当前定位和目的地发送至后端。
+     * 成功后展示弹窗并语音播报。
+     */
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     private void sendTripPreview() {
         if (selectedDestLatLng == null) {
             Toast.makeText(this, R.string.preview_no_destination, Toast.LENGTH_SHORT).show();
@@ -654,7 +710,14 @@ public class MainActivity extends AppCompatActivity implements
                 currentLocation.latitude, currentLocation.longitude,
                 selectedDestLatLng.latitude, selectedDestLatLng.longitude,
                 new TripPreviewService.PreviewCallback() {
+<<<<<<< HEAD
                     @Override public void onSuccess(String response) {
+=======
+                    @Override
+                    public void onSuccess(String response) {
+                        tvStatus.setText(R.string.preview_success);
+                        Log.d(TAG, "Trip preview response: " + response);
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
                         parseAndShowPreviewResult(response);
                     }
                     @Override public void onError(String error) {
@@ -663,6 +726,12 @@ public class MainActivity extends AppCompatActivity implements
                 });
     }
 
+<<<<<<< HEAD
+=======
+    /**
+     * 解析预览响应并展示弹窗 + 语音播报
+     */
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     private void parseAndShowPreviewResult(String responseJson) {
         try {
             org.json.JSONObject root = new org.json.JSONObject(responseJson);
@@ -670,6 +739,7 @@ public class MainActivity extends AppCompatActivity implements
                 Toast.makeText(this, "预览数据异常", Toast.LENGTH_SHORT).show();
                 return;
             }
+<<<<<<< HEAD
             org.json.JSONObject data = root.optJSONObject("data");
             if (data == null) return;
             String broadcastText = data.optString("text", "");
@@ -682,16 +752,51 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+=======
+
+            org.json.JSONObject data = root.optJSONObject("data");
+            if (data == null) {
+                Toast.makeText(this, "预览数据为空", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String broadcastText = data.optString("text", "");
+            org.json.JSONObject routeSummary = data.optJSONObject("route_summary");
+            org.json.JSONArray keyNodes = data.optJSONArray("key_nodes");
+
+            // 语音播报
+            if (!broadcastText.isEmpty()) {
+                speakForce("行前预览：" + broadcastText);
+            }
+
+            // 展示弹窗
+            showPreviewDialog(broadcastText, routeSummary, keyNodes);
+
+        } catch (org.json.JSONException e) {
+            Log.e(TAG, "Failed to parse preview response", e);
+            Toast.makeText(this, "解析预览数据失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 展示预览结果弹窗
+     */
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     private void showPreviewDialog(String broadcastText,
                                     org.json.JSONObject routeSummary,
                                     org.json.JSONArray keyNodes) {
         android.view.View dialogView = getLayoutInflater().inflate(R.layout.dialog_preview_result, null);
+<<<<<<< HEAD
+=======
+
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         TextView tvPreviewText = dialogView.findViewById(R.id.tv_preview_text);
         TextView tvPreviewSummary = dialogView.findViewById(R.id.tv_preview_summary);
         LinearLayout layoutKeyNodes = dialogView.findViewById(R.id.layout_key_nodes);
         Button btnSpeak = dialogView.findViewById(R.id.btn_preview_speak);
         Button btnClose = dialogView.findViewById(R.id.btn_preview_close);
 
+<<<<<<< HEAD
         tvPreviewText.setText(broadcastText.isEmpty() ? "暂无播报文案" : broadcastText);
         String summaryText = "";
         if (routeSummary != null) {
@@ -701,11 +806,28 @@ public class MainActivity extends AppCompatActivity implements
         }
         tvPreviewSummary.setText(summaryText.isEmpty() ? "暂无概要" : summaryText);
 
+=======
+        // 播报文案
+        tvPreviewText.setText(broadcastText.isEmpty() ? "暂无播报文案" : broadcastText);
+
+        // 路线概要
+        String summaryText = "";
+        if (routeSummary != null) {
+            String totalDist = routeSummary.optString("total_distance", "未知");
+            String totalTime = routeSummary.optString("total_duration", "未知");
+            int nodeCount = routeSummary.optInt("key_node_count", 0);
+            summaryText = "总距离：" + totalDist + "\n预计时间：" + totalTime + "\n关键节点数：" + nodeCount;
+        }
+        tvPreviewSummary.setText(summaryText.isEmpty() ? "暂无概要信息" : summaryText);
+
+        // 关键节点
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
         layoutKeyNodes.removeAllViews();
         if (keyNodes != null && keyNodes.length() > 0) {
             for (int i = 0; i < keyNodes.length(); i++) {
                 org.json.JSONObject node = keyNodes.optJSONObject(i);
                 if (node == null) continue;
+<<<<<<< HEAD
                 TextView tvNode = new TextView(this);
                 tvNode.setTextSize(14);
                 tvNode.setTextColor(getResources().getColor(android.R.color.black));
@@ -717,6 +839,41 @@ public class MainActivity extends AppCompatActivity implements
                 if (node.has("assistant_action")) sb.append("（").append(node.optString("assistant_action")).append("）");
                 tvNode.setText(sb.toString());
                 layoutKeyNodes.addView(tvNode);
+=======
+
+                String action = node.optString("action", "");
+                String assistantAction = node.optString("assistant_action", "");
+                String instruction = node.optString("instruction", "");
+                String direction = node.optString("relative_direction", "");
+
+                TextView tvNode = new TextView(this);
+                tvNode.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                tvNode.setTextSize(14);
+                tvNode.setTextColor(getResources().getColor(android.R.color.black));
+                tvNode.setPadding(0, 8, 0, 8);
+
+                StringBuilder nodeText = new StringBuilder();
+                nodeText.append("节点 ").append(i + 1).append("：");
+                if (!direction.isEmpty()) {
+                    nodeText.append(direction);
+                }
+                if (!action.isEmpty()) {
+                    nodeText.append(action);
+                }
+                if (!assistantAction.isEmpty()) {
+                    nodeText.append("（").append(assistantAction).append("）");
+                }
+                if (!instruction.isEmpty()) {
+                    nodeText.append("\n  ").append(instruction);
+                }
+
+                tvNode.setText(nodeText.toString());
+                layoutKeyNodes.addView(tvNode);
+
+                // 分隔线
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
                 if (i < keyNodes.length() - 1) {
                     View divider = new View(this);
                     divider.setLayoutParams(new LinearLayout.LayoutParams(
@@ -725,6 +882,7 @@ public class MainActivity extends AppCompatActivity implements
                     layoutKeyNodes.addView(divider);
                 }
             }
+<<<<<<< HEAD
         }
 
         androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
@@ -736,6 +894,32 @@ public class MainActivity extends AppCompatActivity implements
 
     // ========== 地图绘制 ==========
 
+=======
+        } else {
+            TextView tvEmpty = new TextView(this);
+            tvEmpty.setText("暂无关键节点信息");
+            tvEmpty.setTextSize(14);
+            tvEmpty.setTextColor(getResources().getColor(android.R.color.darker_gray));
+            layoutKeyNodes.addView(tvEmpty);
+        }
+
+        androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setCancelable(true)
+                .create();
+
+        btnSpeak.setOnClickListener(v -> {
+            if (!broadcastText.isEmpty()) {
+                speakForce("行前预览：" + broadcastText);
+            }
+        });
+
+        btnClose.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
+    }
+
+>>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     private void drawRoute(List<LatLng> points) {
         if (mMap == null || points == null || points.isEmpty()) return;
         if (routePolyline != null) { routePolyline.remove(); routePolyline = null; }
