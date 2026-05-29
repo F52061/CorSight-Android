@@ -6,37 +6,42 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- 地图铺满全屏 -->
+    <LinearLayout
+        android:id="@+id/brand_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:paddingTop="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="瞳心引航v1.1"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <com.amap.api.maps.MapView
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brand_bar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 水印 -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="36dp"
-        android:text="瞳心引航"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#60FFFFFF"
-        android:elevation="4dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- 导航信息浮层（地图上方） -->
     <LinearLayout
         android:id="@+id/layout_nav_info"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="12dp"
         android:orientation="vertical"
         android:padding="12dp"
         android:background="@drawable/card_background"
@@ -44,7 +49,7 @@
         android:elevation="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/brand_bar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
                 android:text="0m" />
@@ -66,7 +71,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="?android:attr/textColorPrimary"
                 android:text="0分钟"
@@ -82,7 +87,6 @@
             android:layout_marginTop="4dp" />
     </LinearLayout>
 
-    <!-- 搜索建议列表（浮动在搜索栏上方，约束定位） -->
     <androidx.cardview.widget.CardView
         android:id="@+id/card_suggestions"
         android:layout_width="0dp"
@@ -106,19 +110,19 @@
             android:padding="4dp" />
     </androidx.cardview.widget.CardView>
 
-    <!-- 搜索栏（浮在地图上方，居中偏上） -->
     <androidx.cardview.widget.CardView
         android:id="@+id/search_bar_container"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="12dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
         app:cardBackgroundColor="?attr/colorSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="72dp">
+        app:layout_constraintTop_toBottomOf="@id/brand_bar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -159,13 +163,26 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- 页面容器（历史、设置）覆盖全屏 -->
+    <ImageButton
+        android:id="@+id/btn_my_location"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/bg_location_button"
+        android:contentDescription="定位"
+        android:src="@android:drawable/ic_menu_mylocation"
+        android:tint="@color/white"
+        android:elevation="6dp"
+        app:layout_constraintTop_toBottomOf="@id/search_bar_container"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <FrameLayout
         android:id="@+id/container_pages"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brand_bar"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -183,7 +200,6 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <!-- 底部功能按钮组（约束在 BottomNav 上方） -->
     <LinearLayout
         android:id="@+id/bottom_controls"
         android:layout_width="0dp"
@@ -198,7 +214,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav">
 
-        <!-- 导航按钮行 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -221,13 +236,12 @@
                 android:layout_height="44dp"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="行前预览"
+                android:text="路线预览"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:background="@color/purple_500" />
         </LinearLayout>
 
-        <!-- 视觉避障按钮 -->
         <Button
             android:id="@+id/btn_vision_test"
             android:layout_width="match_parent"
@@ -242,7 +256,6 @@
             android:drawablePadding="8dp"
             android:gravity="center" />
 
-        <!-- 按住说话按钮 -->
         <FrameLayout
             android:id="@+id/btn_voice_container"
             android:layout_width="match_parent"
@@ -271,7 +284,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="按住说话"
+                    android:text="语音输入"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -284,19 +297,17 @@
                 android:visibility="gone" />
         </FrameLayout>
 
-        <!-- 停止语音按钮 -->
         <Button
             android:id="@+id/btn_stop_tts"
             android:layout_width="match_parent"
             android:layout_height="36dp"
-            android:text="停止语音"
+            android:text="停止播报"
             android:textColor="@color/white"
             android:textSize="13sp"
             android:background="@color/gray"
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- 底部导航栏（固定在底部） -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"

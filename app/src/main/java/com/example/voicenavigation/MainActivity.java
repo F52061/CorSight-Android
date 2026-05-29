@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements
     private Button btnPreviewRoute;
     private Button btnVisionTest;
     private Button btnStopTts;
+    private ImageButton btnMyLocation;
     private EditText etDestination;
     private ImageButton btnClearSearch;
     private CardView cardSuggestions;
@@ -151,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements
         btnPreviewRoute = findViewById(R.id.btn_preview_route);
         btnVisionTest = findViewById(R.id.btn_vision_test);
         btnStopTts = findViewById(R.id.btn_stop_tts);
+        btnMyLocation = findViewById(R.id.btn_my_location);
         etDestination = findViewById(R.id.et_destination);
         btnClearSearch = findViewById(R.id.btn_clear_search);
         cardSuggestions = findViewById(R.id.card_suggestions);
@@ -268,6 +270,17 @@ public class MainActivity extends AppCompatActivity implements
         btnPreviewRoute.setOnClickListener(v -> sendTripPreview());
         btnVisionTest.setOnClickListener(v ->
             startActivity(new android.content.Intent(this, VisionTestActivity.class)));
+        btnMyLocation.setOnClickListener(v -> {
+            if (!checkLocationPermission()) {
+                requestPermissions();
+                return;
+            }
+            if (mMap != null && currentLocation != null) {
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 16));
+            } else {
+                Toast.makeText(this, "正在获取当前位置", Toast.LENGTH_SHORT).show();
+            }
+        });
         btnStopTts.setOnClickListener(v -> {
             if (baiduTts != null) {
                 baiduTts.stopPlayback();
@@ -281,10 +294,12 @@ public class MainActivity extends AppCompatActivity implements
             containerPages.setVisibility(View.GONE);
             bottomControls.setVisibility(View.VISIBLE);
             searchBarContainer.setVisibility(View.VISIBLE);
+            btnMyLocation.setVisibility(View.VISIBLE);
         } else {
             containerPages.setVisibility(View.VISIBLE);
             bottomControls.setVisibility(View.GONE);
             searchBarContainer.setVisibility(View.GONE);
+            btnMyLocation.setVisibility(View.GONE);
             hideSuggestions();
             pageHistoryView.setVisibility(index == 1 ? View.VISIBLE : View.GONE);
             pageSettingsView.setVisibility(index == 2 ? View.VISIBLE : View.GONE);
@@ -374,9 +389,6 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void loadSettings() {
-        TextView tvAmapKey = findViewById(R.id.tv_amap_key);
-        tvAmapKey.setText(BuildConfig.AMAP_API_KEY);
-
         EditText etServerUrl = pageSettingsView.findViewById(R.id.et_server_url);
         Button btnSaveUrl = pageSettingsView.findViewById(R.id.btn_save_url);
 
@@ -474,15 +486,17 @@ public class MainActivity extends AppCompatActivity implements
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_LOCATION_ROTATE_NO_CENTER);
         myLocationStyle.interval(2000);
         mMap.setMyLocationStyle(myLocationStyle);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         if (checkLocationPermission()) {
             mMap.setMyLocationEnabled(true);
         }
 
         mMap.setOnMyLocationChangeListener(location -> {
-            if (currentLocation == null && location != null) {
-                currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            if (location == null) return;
+            boolean shouldMoveCamera = currentLocation == null;
+            currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+            if (shouldMoveCamera) {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
             }
         });

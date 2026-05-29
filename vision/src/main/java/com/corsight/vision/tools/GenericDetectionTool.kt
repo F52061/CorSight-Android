@@ -9,7 +9,7 @@ import com.corsight.vision.VisionTool
 
 class GenericDetectionTool : VisionTool {
     override val id: String = "generic_detection"
-    override val displayName: String = "通用目标检测"
+    override val displayName: String = "本地视觉避障检测"
 
     companion object {
         const val MODEL_ID = "yolov8"
@@ -17,7 +17,12 @@ class GenericDetectionTool : VisionTool {
 
     override fun onActivate(context: Context) {
         if (ModelRegistry.getDetector(MODEL_ID) == null) {
-            val engine = YoloV8OnnxEngine()
+            val configClass = Class.forName("com.example.voicenavigation.YoloModelConfig")
+            val modelPath = configClass.getField("MODEL_ASSET_PATH").get(null) as String
+            val labelPath = configClass.getField("LABEL_ASSET_PATH").get(null) as String
+            val confidence = configClass.getField("confidenceThreshold").getFloat(null)
+            val nms = configClass.getField("nmsThreshold").getFloat(null)
+            val engine = YoloV8OnnxEngine(modelPath, labelPath, confidence, nms)
             ModelRegistry.register(MODEL_ID, engine)
             engine.load(context)
         }
