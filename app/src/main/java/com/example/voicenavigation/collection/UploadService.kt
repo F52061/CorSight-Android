@@ -1,22 +1,23 @@
 package com.example.voicenavigation.collection
 
 import android.util.Log
-import okhttp3.*
+import com.example.voicenavigation.AppConfig
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
 import org.json.JSONObject
 import java.io.File
-<<<<<<< HEAD
-=======
-import java.io.IOException
->>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 import java.util.concurrent.TimeUnit
 
 class UploadService(private val baseUrl: String) {
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
-<<<<<<< HEAD
         .readTimeout(120, TimeUnit.SECONDS)
         .build()
 
@@ -26,9 +27,14 @@ class UploadService(private val baseUrl: String) {
     suspend fun uploadTask(task: CaptureTask): Boolean {
         lastError = ""
         return try {
+            val normalizedBaseUrl = AppConfig.normalizeBaseUrl(baseUrl)
+            if (normalizedBaseUrl.isEmpty()) {
+                lastError = "请先在设置中填写后端服务地址"
+                return false
+            }
             val directions = listOf("N", "NE", "E", "SE", "S", "SW", "W", "NW")
 
-            // 构建 multipart body：jsonData + 8张图片
+            // 构建 multipart body：jsonData + 8 张图片
             val builder = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
 
@@ -44,7 +50,7 @@ class UploadService(private val baseUrl: String) {
             }
             builder.addFormDataPart("jsonData", jsonData.toString())
 
-            // 2. 8 张图片（字段名 image_N, image_NE, ...）
+            // 2. 8 张图片（字段名：image_N, image_NE, ...）
             var imageCount = 0
             for (dir in directions) {
                 val path = task.images[dir]
@@ -55,7 +61,7 @@ class UploadService(private val baseUrl: String) {
                 }
                 val file = File(path)
                 if (!file.exists()) {
-                    lastError = "图片文件不存在: $dir"
+                    lastError = "图片文件不存在：$dir"
                     Log.e("UploadService", lastError)
                     return false
                 }
@@ -67,10 +73,10 @@ class UploadService(private val baseUrl: String) {
                 imageCount++
             }
 
-            Log.d("UploadService", "Uploading ${task.pointId} with $imageCount images to $baseUrl/api/upload/sampling_point")
+            Log.d("UploadService", "Uploading ${task.pointId} with $imageCount images to $normalizedBaseUrl/api/upload/sampling_point")
 
             val request = Request.Builder()
-                .url("$baseUrl/api/upload/sampling_point")
+                .url("$normalizedBaseUrl/api/upload/sampling_point")
                 .post(builder.build())
                 .build()
 
@@ -81,75 +87,13 @@ class UploadService(private val baseUrl: String) {
                 Log.d("UploadService", "Upload success: $responseBody")
                 true
             } else {
-                lastError = "服务器错误 ${response.code}: $responseBody"
+                lastError = "服务器错误：${response.code}: $responseBody"
                 Log.e("UploadService", lastError)
                 false
             }
         } catch (e: Exception) {
-            lastError = "上传异常: ${e.message}"
+            lastError = "上传异常：${e.message}"
             Log.e("UploadService", lastError, e)
-=======
-        .readTimeout(60, TimeUnit.SECONDS)
-        .build()
-
-    private val jsonMediaType = "application/json; charset=utf-8".toMediaType()
-
-    suspend fun uploadTask(task: CaptureTask): Boolean {
-        return try {
-            // Step 1: upload metadata
-            val metaJson = JSONObject().apply {
-                put("point_id", task.pointId)
-                put("chunk_id", task.chunkId)
-                put("longitude", task.longitude)
-                put("latitude", task.latitude)
-                put("scene_description", task.sceneDescription)
-                put("image_count", 8)
-            }
-
-            val metaRequest = Request.Builder()
-                .url("$baseUrl/api/upload/upload_meta")
-                .post(RequestBody.create(jsonMediaType, metaJson.toString()))
-                .build()
-
-            val metaResponse = client.newCall(metaRequest).execute()
-            if (!metaResponse.isSuccessful) {
-                Log.e("UploadService", "Meta upload failed: ${metaResponse.code}")
-                return false
-            }
-
-            Thread.sleep(100)
-
-            // Step 2: upload images serially
-            val directions = listOf("N", "NE", "E", "SE", "S", "SW", "W", "NW")
-            for (dir in directions) {
-                val path = task.images[dir] ?: continue
-                val file = File(path)
-                if (!file.exists()) continue
-
-                val body = MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("point_id", task.pointId)
-                    .addFormDataPart("direction", dir)
-                    .addFormDataPart("image", file.name, file.asRequestBody("image/jpeg".toMediaType()))
-                    .build()
-
-                val imgRequest = Request.Builder()
-                    .url("$baseUrl/api/upload/upload_image")
-                    .post(body)
-                    .build()
-
-                val imgResponse = client.newCall(imgRequest).execute()
-                if (!imgResponse.isSuccessful) {
-                    Log.e("UploadService", "Image $dir upload failed: ${imgResponse.code}")
-                    return false
-                }
-                Thread.sleep(100)
-            }
-
-            true
-        } catch (e: Exception) {
-            Log.e("UploadService", "Upload failed", e)
->>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
             false
         }
     }

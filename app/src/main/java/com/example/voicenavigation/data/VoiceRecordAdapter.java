@@ -63,7 +63,7 @@ public class VoiceRecordAdapter extends RecyclerView.Adapter<VoiceRecordAdapter.
 
         String meta;
         if (dest != null && !dest.isEmpty()) {
-            meta = dateStr + "  → " + dest;
+            meta = dateStr + "  -> " + dest;
         } else {
             meta = dateStr;
         }

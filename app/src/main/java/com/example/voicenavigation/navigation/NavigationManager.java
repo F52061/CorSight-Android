@@ -28,7 +28,7 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
     private static final float ARRIVAL_DISTANCE = 20;
     private static final float OFF_ROUTE_THRESHOLD = 50;
 
-    private Context context;
+    private final Context context;
     private AMapLocationClient locationClient;
     private AMapLocationClientOption locationOption;
     private RouteSearch routeSearch;
@@ -76,27 +76,15 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
     private void initLocationClient() {
         try {
             locationClient = new AMapLocationClient(context);
-            Log.d(TAG, "AMapLocationClient created successfully");
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to create AMapLocationClient: " + e.getMessage(), e);
-            Log.e(TAG, "===== 定位服务初始化失败 =====");
-            Log.e(TAG, "原因: " + e.getClass().getName() + ": " + e.getMessage());
-            Log.e(TAG, "请检查: 1. API Key是否已在高德开放平台注册");
-            Log.e(TAG, "请检查: 2. 包名 " + context.getPackageName() + " 是否与API Key绑定的包名一致");
-            Log.e(TAG, "注册地址: https://lbs.amap.com/dev/key/app");
-            return;
-        }
-
-        try {
             locationOption = new AMapLocationClientOption();
             locationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             locationOption.setInterval(UPDATE_INTERVAL);
             locationOption.setNeedAddress(true);
             locationOption.setWifiScan(true);
             locationOption.setLocationCacheEnable(false);
-            Log.d(TAG, "AMapLocationClientOption configured successfully");
+            locationClient.setLocationOption(locationOption);
         } catch (Exception e) {
-            Log.e(TAG, "Failed to configure AMapLocationClientOption", e);
+            Log.e(TAG, "Failed to create AMapLocationClient", e);
             locationClient = null;
             return;
         }
@@ -104,32 +92,42 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
         locationClient.setLocationListener(new AMapLocationListener() {
             @Override
             public void onLocationChanged(AMapLocation aMapLocation) {
-                if (aMapLocation != null) {
-                    if (aMapLocation.getErrorCode() == 0) {
-                        Location location = new Location("amap");
-                        location.setLatitude(aMapLocation.getLatitude());
-                        location.setLongitude(aMapLocation.getLongitude());
-                        location.setAccuracy(aMapLocation.getAccuracy());
-                        location.setAltitude(aMapLocation.getAltitude());
-                        location.setSpeed(aMapLocation.getSpeed());
-                        location.setTime(aMapLocation.getTime());
+                if (aMapLocation == null) return;
+                if (aMapLocation.getErrorCode() == 0) {
+                    Location location = new Location("amap");
+                    location.setLatitude(aMapLocation.getLatitude());
+                    location.setLongitude(aMapLocation.getLongitude());
+                    location.setAccuracy(aMapLocation.getAccuracy());
+                    location.setAltitude(aMapLocation.getAltitude());
+                    location.setSpeed(aMapLocation.getSpeed());
+                    location.setTime(aMapLocation.getTime());
 
-                        if (isNavigating && routePoints != null && !routePoints.isEmpty()) {
-                            updateNavigationProgress(location);
-                        }
+                    if (isNavigating && routePoints != null && !routePoints.isEmpty()) {
+                        updateNavigationProgress(location);
+                    }
 
-                        if (navigationCallback != null) {
-                            navigationCallback.onLocationUpdated(location);
-                        }
-                    } else {
-                        Log.e(TAG, "Location error: " + aMapLocation.getErrorCode() + " - " + aMapLocation.getErrorInfo());
-                        if (navigationCallback != null && !isNavigating) {
-                            navigationCallback.onNavigationError("定位失败: " + aMapLocation.getErrorInfo());
-                        }
+                    if (navigationCallback != null) {
+                        navigationCallback.onLocationUpdated(location);
+                    }
+                } else {
+                    String error = "定位失败：" + aMapLocation.getErrorInfo();
+                    Log.e(TAG, error + ", code=" + aMapLocation.getErrorCode());
+                    if (navigationCallback != null && !isNavigating) {
+                        navigationCallback.onNavigationError(error);
                     }
                 }
             }
         });
+    }
+
+    public void requestCurrentLocation() {
+        if (locationClient == null) {
+            if (navigationCallback != null) {
+                navigationCallback.onNavigationError("定位服务未初始化");
+            }
+            return;
+        }
+        locationClient.startLocation();
     }
 
     private void updateNavigationProgress(Location currentLocation) {
@@ -148,7 +146,6 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
         }
 
         if (minDist > OFF_ROUTE_THRESHOLD && !isRerouting) {
-            Log.w(TAG, "Off route detected! Distance from route: " + minDist + "m");
             triggerReroute(currentLocation);
             return;
         }
@@ -160,10 +157,9 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
             remainingDistance += calculateDistance(routePoints.get(i), routePoints.get(i + 1));
         }
 
-        float remainingDuration = (remainingDistance / totalDistance) * totalDuration;
-
+        float remainingDuration = totalDistance > 0 ? (remainingDistance / totalDistance) * totalDuration : 0;
         String nextInstruction = "";
-        if (stepInstructions != null) {
+        if (stepInstructions != null && currentWalkPath != null) {
             int stepIdx = 0;
             float accumulated = 0;
             for (WalkStep step : currentWalkPath.getSteps()) {
@@ -185,10 +181,7 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
             navigationCallback.onNavigationInfoUpdated(remainingDistance, remainingDuration, nextInstruction);
         }
 
-        Log.d(TAG, "Walk nav progress: remaining=" + remainingDistance + "m, nearestIdx=" + nearestIdx);
-
         if (remainingDistance < ARRIVAL_DISTANCE) {
-            Log.d(TAG, "Arrived at destination!");
             stopNavigation();
             if (navigationCallback != null) {
                 navigationCallback.onArrived();
@@ -201,7 +194,6 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
         if (navigationCallback != null) {
             navigationCallback.onReRouting();
         }
-        Log.d(TAG, "Re-routing from current position");
         planRoute(
                 new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 destination,
@@ -225,7 +217,6 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
         RouteSearch.FromAndTo fromAndTo = new RouteSearch.FromAndTo(from, to);
         RouteSearch.WalkRouteQuery query = new RouteSearch.WalkRouteQuery(fromAndTo, RouteSearch.WalkDefault);
 
-        Log.d(TAG, "Planning walk route from " + origin.latitude + "," + origin.longitude + " to " + dest.latitude + "," + dest.longitude);
         try {
             routeSearch.calculateWalkRouteAsyn(query);
         } catch (Exception e) {
@@ -239,7 +230,6 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
 
     @Override
     public void onWalkRouteSearched(WalkRouteResult result, int rCode) {
-        Log.d(TAG, "Walk route search result, rCode: " + rCode);
         if (rCode == 1000) {
             if (result == null || result.getPaths() == null || result.getPaths().isEmpty()) {
                 isRerouting = false;
@@ -273,12 +263,9 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
             }
 
             currentPolylineIndex = 0;
-
             if (!isNavigating) {
                 isNavigating = true;
             }
-
-            Log.d(TAG, "Walk route found: " + routePoints.size() + " points, " + totalDistance + "m, " + totalDuration + "s");
 
             if (locationClient != null && !isRerouting) {
                 locationClient.startLocation();
@@ -293,7 +280,6 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
 
             isRerouting = false;
         } else {
-            Log.e(TAG, "Walk route search failed, error code: " + rCode);
             isRerouting = false;
             String errorMsg = "步行路线规划失败";
             if (rCode == 2001) {
@@ -310,16 +296,13 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
     }
 
     @Override
-    public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {
-    }
+    public void onDriveRouteSearched(DriveRouteResult driveRouteResult, int i) {}
 
     @Override
-    public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {
-    }
+    public void onBusRouteSearched(BusRouteResult busRouteResult, int i) {}
 
     @Override
-    public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {
-    }
+    public void onRideRouteSearched(RideRouteResult rideRouteResult, int i) {}
 
     public void startNavigation(LatLng destination) {
         this.destination = destination;
@@ -350,7 +333,6 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
         if (navigationCallback != null) {
             navigationCallback.onNavigationStopped();
         }
-        Log.d(TAG, "Walk navigation stopped");
     }
 
     public boolean isNavigating() {
@@ -373,13 +355,13 @@ public class NavigationManager implements RouteSearch.OnRouteSearchListener {
     }
 
     private float calculateDistance(LatLng p1, LatLng p2) {
-        double R = 6371000;
+        double radius = 6371000;
         double dLat = Math.toRadians(p2.latitude - p1.latitude);
         double dLng = Math.toRadians(p2.longitude - p1.longitude);
         double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
                 + Math.cos(Math.toRadians(p1.latitude)) * Math.cos(Math.toRadians(p2.latitude))
                 * Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return (float) (R * c);
+        return (float) (radius * c);
     }
 }

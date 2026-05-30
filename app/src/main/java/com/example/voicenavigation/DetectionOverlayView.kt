@@ -19,11 +19,23 @@ class DetectionOverlayView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val detections = mutableListOf<Detection>()
+    private val alerts = mutableListOf<ObstacleAlert>()
     private val mappedRect = RectF()
+    private val mappedRiskZone = RectF()
+
     private val paintBox = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 4f
         color = Color.GREEN
+    }
+    private val paintRiskZone = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 4f
+        color = Color.parseColor("#CCFFC107")
+    }
+    private val paintRiskFill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = Color.parseColor("#22FFC107")
     }
     private val paintText = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
@@ -57,9 +69,11 @@ class DetectionOverlayView @JvmOverloads constructor(
         setSourceImageSize(modelInputSize, modelInputSize)
     }
 
-    fun updateDetections(newDetections: List<Detection>) {
+    fun updateDetections(newDetections: List<Detection>, newAlerts: List<ObstacleAlert> = emptyList()) {
         detections.clear()
         detections.addAll(newDetections)
+        alerts.clear()
+        alerts.addAll(newAlerts)
         invalidate()
     }
 
@@ -79,11 +93,21 @@ class DetectionOverlayView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        drawRiskZone(canvas)
         for (detection in detections) {
+            val alert = alerts.firstOrNull { it.detection == detection }
             mapRect(detection.box, mappedRect)
+            paintBox.color = colorForAlert(alert)
             canvas.drawRect(mappedRect, paintBox)
-            drawLabel(canvas, detection, mappedRect)
+            drawLabel(canvas, detection, alert, mappedRect)
         }
+    }
+
+    private fun drawRiskZone(canvas: Canvas) {
+        val riskZone = ObstacleRiskAnalyzer.riskZone(sourceWidth, sourceHeight)
+        mapRect(riskZone, mappedRiskZone)
+        canvas.drawRect(mappedRiskZone, paintRiskFill)
+        canvas.drawRect(mappedRiskZone, paintRiskZone)
     }
 
     private fun mapRect(source: RectF, out: RectF) {
@@ -99,8 +123,18 @@ class DetectionOverlayView @JvmOverloads constructor(
         out.bottom = out.bottom.coerceIn(0f, height.toFloat())
     }
 
-    private fun drawLabel(canvas: Canvas, detection: Detection, rect: RectF) {
-        val label = "${detection.label} ${(detection.score * 100).toInt()}%"
+    private fun drawLabel(canvas: Canvas, detection: Detection, alert: ObstacleAlert?, rect: RectF) {
+        val urgencyText = when (alert?.urgency) {
+            ObstacleUrgency.LOW -> "低"
+            ObstacleUrgency.MEDIUM -> "中"
+            ObstacleUrgency.HIGH -> "高"
+            null -> ""
+        }
+        val label = if (urgencyText.isEmpty()) {
+            "${detection.label} ${(detection.score * 100).toInt()}%"
+        } else {
+            "${detection.label} $urgencyText ${(alert!!.overlapRatio * 100).toInt()}%"
+        }
         val textWidth = paintText.measureText(label)
         val textHeight = paintText.fontMetrics.run { descent - ascent }
         val bgLeft = rect.left
@@ -110,5 +144,14 @@ class DetectionOverlayView @JvmOverloads constructor(
 
         canvas.drawRect(bgLeft, bgTop, bgRight, bgBottom, paintTextBg)
         canvas.drawText(label, bgLeft + 6f, bgBottom - 7f, paintText)
+    }
+
+    private fun colorForAlert(alert: ObstacleAlert?): Int {
+        return when (alert?.urgency) {
+            ObstacleUrgency.LOW -> Color.parseColor("#FFFFC107")
+            ObstacleUrgency.MEDIUM -> Color.parseColor("#FFFF9800")
+            ObstacleUrgency.HIGH -> Color.parseColor("#FFF44336")
+            null -> Color.GREEN
+        }
     }
 }

@@ -14,14 +14,14 @@
         android:gravity="center_vertical"
         android:padding="16dp"
         android:paddingTop="32dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="瞳心引航v1.1"
+            android:text="瞳心引航"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -31,10 +31,10 @@
         android:id="@+id/map"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/brand_bar"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/brand_bar" />
 
     <LinearLayout
         android:id="@+id/layout_nav_info"
@@ -42,13 +42,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="12dp"
+        android:background="@drawable/card_background"
+        android:elevation="4dp"
         android:orientation="vertical"
         android:padding="12dp"
-        android:background="@drawable/card_background"
         android:visibility="gone"
-        android:elevation="4dp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/brand_bar">
 
         <LinearLayout
@@ -61,74 +61,51 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:text="0m"
                 android:textColor="?android:attr/textColorPrimary"
-                android:text="0m" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_nav_duration"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="?android:attr/textColorPrimary"
+                android:gravity="end"
                 android:text="0分钟"
-                android:gravity="end" />
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_nav_instruction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:layout_marginTop="4dp"
             android:textColor="?android:attr/textColorSecondary"
-            android:layout_marginTop="4dp" />
+            android:textSize="14sp" />
     </LinearLayout>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_suggestions"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="4dp"
-        android:visibility="gone"
-        app:cardCornerRadius="12dp"
-        app:cardElevation="6dp"
-        app:cardBackgroundColor="?attr/colorSurface"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_bar_container"
-        app:layout_constrainedHeight="true">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_suggestions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxHeight="220dp"
-            android:padding="4dp" />
-    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/search_bar_container"
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor="?attr/colorSurface"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/brand_bar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
             android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingHorizontal="12dp">
 
             <ImageView
@@ -141,26 +118,49 @@
                 android:id="@+id/et_destination"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
+                android:layout_weight="1"
                 android:background="@null"
                 android:hint="搜索目的地"
-                android:textSize="14sp"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textColorHint="?android:attr/textColorSecondary"
-                android:imeOptions="actionSearch"
-                android:singleLine="true" />
+                android:textSize="14sp" />
 
             <ImageButton
                 android:id="@+id/btn_clear_search"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="清除"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
                 android:tint="?android:attr/textColorSecondary"
-                android:visibility="gone"
-                android:contentDescription="清除" />
+                android:visibility="gone" />
         </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_suggestions"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="4dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="?attr/colorSurface"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_bar_container">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_suggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="220dp"
+            android:padding="4dp" />
     </androidx.cardview.widget.CardView>
 
     <ImageButton
@@ -171,282 +171,75 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_location_button"
         android:contentDescription="定位"
+        android:elevation="6dp"
         android:src="@android:drawable/ic_menu_mylocation"
         android:tint="@color/white"
-        android:elevation="6dp"
-        app:layout_constraintTop_toBottomOf="@id/search_bar_container"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/search_bar_container" />
 
     <FrameLayout
         android:id="@+id/container_pages"
         android:layout_width="0dp"
         android:layout_height="0dp"
-<<<<<<< HEAD
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/brand_bar"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-=======
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:id="@+id/page_map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <!-- 顶部：状态 + 语音按钮 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="?attr/colorPrimary"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="8dp">
-
-                <TextView
-                    android:id="@+id/tv_status"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/speech_hint"
-                    android:textColor="@color/white"
-                    android:textSize="15sp"
-                    android:singleLine="true"
-                    android:ellipsize="end" />
-
-                <Button
-                    android:id="@+id/btn_voice_input"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:background="@color/purple_500"
-                    android:drawableTop="@drawable/ic_microphone"
-                    android:contentDescription="@string/speech_hint"
-                    android:layout_marginStart="8dp" />
-            </LinearLayout>
-
-            <!-- 搜索行 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:paddingHorizontal="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="4dp">
-
-                <EditText
-                    android:id="@+id/et_destination"
-                    android:layout_width="0dp"
-                    android:layout_height="42dp"
-                    android:layout_weight="1"
-                    android:hint="@string/destination_hint"
-                    android:imeOptions="actionSearch"
-                    android:singleLine="true"
-                    android:paddingHorizontal="12dp"
-                    android:background="@drawable/edit_text_background"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/gray"
-                    android:textSize="14sp" />
-
-                <Button
-                    android:id="@+id/btn_search"
-                    android:layout_width="wrap_content"
-                    android:layout_height="42dp"
-                    android:text="搜索"
-                    android:textColor="@color/white"
-                    android:textSize="13sp"
-                    android:paddingHorizontal="16dp"
-                    android:background="@color/orange"
-                    android:layout_marginStart="6dp" />
-            </LinearLayout>
-
-            <!-- 地图面板（压缩高度） -->
-            <com.amap.api.maps.MapView
-                android:id="@+id/map"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.35" />
-
-            <!-- 导航信息（导航时显示） -->
-            <LinearLayout
-                android:id="@+id/layout_nav_info"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:background="#CCFFFFFF"
-                android:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tv_nav_distance"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:text="0m" />
-
-                    <TextView
-                        android:id="@+id/tv_nav_duration"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:text="0分钟"
-                        android:gravity="end" />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_nav_instruction"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/gray"
-                    android:text=""
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-
-            <!-- 底部快速操作区 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="12dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <Button
-                        android:id="@+id/btn_start_navigation"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="@string/start_navigation"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:background="@color/teal_200"
-                        android:paddingHorizontal="8dp" />
-
-                    <Button
-                        android:id="@+id/btn_preview_route"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:text="@string/preview_route"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:background="@color/purple_500"
-                        android:paddingHorizontal="8dp"
-                        android:layout_marginStart="8dp" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/btn_stop_tts"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:text="🔇 停止语音"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:background="@color/gray"
-                    android:layout_marginTop="8dp"
-                    android:visibility="gone" />
-
-                <Button
-                    android:id="@+id/btn_vision_test"
-                    android:layout_width="match_parent"
-                    android:layout_height="52dp"
-                    android:text="  🛡️  视觉避障检测"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:background="@color/vision_green"
-                    android:drawableStart="@drawable/ic_vision"
-                    android:drawablePadding="8dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center" />
-            </LinearLayout>
-
-        </LinearLayout>
->>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
+        app:layout_constraintTop_toBottomOf="@id/brand_bar">
 
         <include
             android:id="@+id/page_history"
             layout="@layout/page_history"
             android:layout_width="match_parent"
-<<<<<<< HEAD
             android:layout_height="match_parent" />
-=======
-            android:layout_height="match_parent"
-            android:visibility="gone" />
->>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
 
         <include
             android:id="@+id/page_settings"
             layout="@layout/page_settings"
             android:layout_width="match_parent"
-<<<<<<< HEAD
             android:layout_height="match_parent" />
-=======
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-
->>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
     </FrameLayout>
 
     <LinearLayout
         android:id="@+id/bottom_controls"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="?android:attr/colorBackground"
+        android:elevation="8dp"
         android:orientation="vertical"
         android:paddingHorizontal="12dp"
         android:paddingTop="8dp"
         android:paddingBottom="4dp"
-        android:background="?android:attr/colorBackground"
-        android:elevation="8dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="6dp"
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_start_navigation"
                 android:layout_width="0dp"
                 android:layout_height="44dp"
                 android:layout_weight="1"
+                android:background="@color/teal_200"
                 android:text="开始导航"
                 android:textColor="@color/white"
-                android:textSize="14sp"
-                android:background="@color/teal_200" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btn_preview_route"
                 android:layout_width="0dp"
                 android:layout_height="44dp"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="路线预览"
+                android:layout_weight="1"
+                android:background="@color/purple_500"
+                android:text="行前预览"
                 android:textColor="@color/white"
-                android:textSize="14sp"
-                android:background="@color/purple_500" />
+                android:textSize="14sp" />
         </LinearLayout>
 
         <Button
@@ -454,14 +247,14 @@
             android:layout_width="match_parent"
             android:layout_height="44dp"
             android:layout_marginBottom="6dp"
-            android:text="视觉避障检测"
-            android:textColor="@color/white"
-            android:textSize="15sp"
-            android:textStyle="bold"
             android:background="@color/vision_green"
             android:drawableStart="@drawable/ic_vision"
             android:drawablePadding="8dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="视觉避障检测"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <FrameLayout
             android:id="@+id/btn_voice_container"
@@ -477,8 +270,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="22dp"
@@ -491,7 +284,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="语音输入"
+                    android:text="按住说话"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
             </LinearLayout>
@@ -508,10 +301,10 @@
             android:id="@+id/btn_stop_tts"
             android:layout_width="match_parent"
             android:layout_height="36dp"
+            android:background="@color/gray"
             android:text="停止播报"
             android:textColor="@color/white"
             android:textSize="13sp"
-            android:background="@color/gray"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -520,16 +313,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground"
-        app:menu="@menu/menu_main_bottom"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextColor="@color/bottom_nav_color"
-<<<<<<< HEAD
         app:labelVisibilityMode="labeled"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-=======
-        app:labelVisibilityMode="labeled" />
->>>>>>> ff19ed6f514731b631f20d3ab0e9b1c5ed599537
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/menu_main_bottom" />
 </androidx.constraintlayout.widget.ConstraintLayout>

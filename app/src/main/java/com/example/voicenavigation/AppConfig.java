@@ -13,4 +13,13 @@ public final class AppConfig {
     public static SharedPreferences prefs(Context context) {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
+
+    public static String normalizeBaseUrl(String baseUrl) {
+        if (baseUrl == null) return "";
+        String normalized = baseUrl.trim();
+        while (normalized.endsWith("/")) {
+            normalized = normalized.substring(0, normalized.length() - 1);
+        }
+        return normalized;
+    }
 }

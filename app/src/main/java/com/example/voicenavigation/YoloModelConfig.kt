@@ -1,7 +1,7 @@
 package com.example.voicenavigation
 
 object YoloModelConfig {
-    const val MODEL_ASSET_PATH = "models/yolov8n.onnx"
+    const val MODEL_ASSET_PATH = "models/yolov8.onnx"
     const val LABEL_ASSET_PATH = "models/coco80.txt"
     const val INPUT_SIZE = 640
 

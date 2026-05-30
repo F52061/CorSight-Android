@@ -10,12 +10,11 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- 区块信息 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@drawable/edit_text_background"
+            android:orientation="vertical"
             android:padding="12dp"
             android:layout_marginBottom="12dp">
 
@@ -23,70 +22,69 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="当前区块"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvChunkId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text="未计算"
-                android:textSize="14sp"
                 android:textColor="@color/gray"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tvCoords"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="0.000000, 0.000000"
-                android:textSize="12sp"
                 android:textColor="@color/gray"
-                android:layout_marginTop="2dp" />
+                android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- 罗盘引导 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@drawable/edit_text_background"
+            android:gravity="center"
+            android:orientation="vertical"
             android:padding="16dp"
-            android:layout_marginBottom="12dp"
-            android:gravity="center">
+            android:layout_marginBottom="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="采集引导"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="0°"
-                android:textSize="48sp"
-                android:textStyle="bold"
                 android:textColor="@color/purple_700"
-                android:layout_marginTop="8dp" />
+                android:textSize="48sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvCurrentDir"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="N"
-                android:textSize="24sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="24sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -99,38 +97,37 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="N"
+                    android:textColor="@color/orange"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/orange" />
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tvAligned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:text=""
-                android:textSize="14sp"
                 android:textColor="@color/vision_green"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btnCapture"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="拍摄 N 方向"
-                android:textSize="16sp"
-                android:textColor="@color/white"
-                android:background="@color/gray"
                 android:layout_marginTop="12dp"
-                android:enabled="false" />
+                android:background="@color/gray"
+                android:enabled="false"
+                android:text="拍摄 N 方向"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
         </LinearLayout>
 
-        <!-- 拍摄进度 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@drawable/edit_text_background"
+            android:orientation="vertical"
             android:padding="12dp"
             android:layout_marginBottom="12dp">
 
@@ -138,34 +135,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="拍摄进度"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textStyle="bold" />
 
             <GridLayout
                 android:id="@+id/gridDirections"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="4"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:columnCount="4">
 
-                <TextView android:text="N"  android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
-                <TextView android:text="NE" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
-                <TextView android:text="E"  android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
-                <TextView android:text="SE" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
-                <TextView android:text="S"  android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
-                <TextView android:text="SW" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
-                <TextView android:text="W"  android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
-                <TextView android:text="NW" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:gravity="center" android:background="#EEEEEE" android:layout_margin="2dp" />
+                <TextView android:text="N" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
+                <TextView android:text="NE" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
+                <TextView android:text="E" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
+                <TextView android:text="SE" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
+                <TextView android:text="S" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
+                <TextView android:text="SW" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
+                <TextView android:text="W" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
+                <TextView android:text="NW" android:layout_width="0dp" android:layout_height="40dp" android:layout_columnWeight="1" android:layout_margin="2dp" android:background="#EEEEEE" android:gravity="center" />
             </GridLayout>
         </LinearLayout>
 
-        <!-- 场景描述 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@drawable/edit_text_background"
+            android:orientation="vertical"
             android:padding="12dp"
             android:layout_marginBottom="12dp">
 
@@ -173,49 +169,47 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="场景描述"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/black" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/etSceneDesc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:hint="例如：体育中心地铁站D1口盲道分叉"
-                android:textSize="14sp"
                 android:maxLength="50"
-                android:layout_marginTop="4dp" />
+                android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- 同步 -->
         <Button
             android:id="@+id/btnSync"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="同步到云端 (0)"
-            android:textColor="@color/white"
+            android:layout_marginBottom="8dp"
             android:background="@color/teal_200"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
+            android:text="同步到云端(0)"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnViewTasks"
             android:layout_width="match_parent"
             android:layout_height="44dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/purple_500"
             android:text="查看本地任务"
             android:textColor="@color/white"
-            android:background="@color/purple_500"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/btnRefreshLocation"
             android:layout_width="match_parent"
             android:layout_height="44dp"
+            android:background="@color/light_gray"
             android:text="刷新位置"
             android:textColor="@color/black"
-            android:background="@color/light_gray"
             android:textSize="14sp" />
-
     </LinearLayout>
 </ScrollView>

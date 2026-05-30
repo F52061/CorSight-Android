@@ -8,10 +8,11 @@ import com.corsight.vision.ToolResult
 import com.corsight.vision.VisionTool
 
 class GenericDetectionTool : VisionTool {
-    override val id: String = "generic_detection"
+    override val id: String = ID
     override val displayName: String = "本地视觉避障检测"
 
     companion object {
+        const val ID = "generic_detection"
         const val MODEL_ID = "yolov8"
     }
 

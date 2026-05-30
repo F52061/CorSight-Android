@@ -6,6 +6,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.voicenavigation.AppConfig;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,8 +56,8 @@ public class TripPreviewService {
 
     private static final String TAG = "TripPreviewService";
 
-    /** 后端服务基础地址，请根据实际部署环境修改 */
-    public static final String DEFAULT_BASE_URL = "https://unbuckled-scorpion-quarry.ngrok-free.dev";
+    /** 后端服务基础地址由设置页填写，默认留空，避免连接过期示例地址。 */
+    public static final String DEFAULT_BASE_URL = "";
 
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final long CONNECT_TIMEOUT_SECONDS = 15;
@@ -70,7 +72,7 @@ public class TripPreviewService {
     }
 
     public TripPreviewService(String baseUrl) {
-        this.baseUrl = baseUrl;
+        this.baseUrl = AppConfig.normalizeBaseUrl(baseUrl);
         this.httpClient = new OkHttpClient.Builder()
                 .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                 .readTimeout(READ_TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -84,7 +86,7 @@ public class TripPreviewService {
      * @param baseUrl 例如 "https://api.example.com"
      */
     public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
+        this.baseUrl = AppConfig.normalizeBaseUrl(baseUrl);
     }
 
     /**
@@ -99,6 +101,10 @@ public class TripPreviewService {
     public void sendPreviewRequest(double originLat, double originLng,
                                     double destLat, double destLng,
                                     @NonNull PreviewCallback previewCallback) {
+        if (baseUrl == null || baseUrl.isEmpty()) {
+            mainHandler.post(() -> previewCallback.onError("请先在设置中填写后端服务地址"));
+            return;
+        }
         String url = baseUrl + "/api/navigation/preview";
 
         JSONObject requestBody = new JSONObject();
