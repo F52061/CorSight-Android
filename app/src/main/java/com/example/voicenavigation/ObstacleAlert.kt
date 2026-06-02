@@ -9,11 +9,19 @@ enum class ObstacleUrgency {
     HIGH
 }
 
+enum class ObstacleAltitude {
+    GROUND,
+    AIR_UNVERIFIED,
+    UNKNOWN
+}
+
 data class ObstacleAlert(
     val detection: Detection,
     val urgency: ObstacleUrgency,
     val overlapRatio: Float,
-    val riskZone: RectF
+    val riskZone: RectF,
+    val altitude: ObstacleAltitude = ObstacleAltitude.UNKNOWN,
+    val poseSnapshot: DevicePoseSnapshot = DevicePoseSnapshot.unavailable()
 )
 
 interface ObstacleWarningListener {

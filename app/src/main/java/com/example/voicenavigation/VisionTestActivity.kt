@@ -71,6 +71,7 @@ class VisionTestActivity : AppCompatActivity() {
     private val pendingSpeechMessages = LinkedList<String>()
     private val obstacleAlertTracker = ObstacleAlertTracker()
     private val smoothedHistory = ArrayDeque<List<Detection>>()
+    private val poseTracker by lazy { DevicePoseTracker(this) }
     private val cameraSource by lazy {
         CameraSource(this, this, binding.previewView, cameraExecutor)
     }
@@ -102,6 +103,7 @@ class VisionTestActivity : AppCompatActivity() {
         ToolRegistry.register(GenericDetectionTool())
         initTts()
         setupUI()
+        poseTracker.start()
 
         val useExternal = getSharedPreferences("corsight_config", MODE_PRIVATE)
             .getBoolean("use_external_device", false)
@@ -497,7 +499,12 @@ class VisionTestActivity : AppCompatActivity() {
 
     private fun renderDetections(items: List<Detection>, quality: ImageQualityAnalyzer.Result) {
         val stableItems = stabilizeDetections(items)
-        val alerts = ObstacleRiskAnalyzer.analyze(stableItems, lastFrameWidth, lastFrameHeight)
+        val alerts = ObstacleRiskAnalyzer.analyze(
+            stableItems,
+            lastFrameWidth,
+            lastFrameHeight,
+            poseTracker.snapshot()
+        )
         val speechEvents = obstacleAlertTracker.update(stableItems, alerts)
         ObstacleWarningNotifier.dispatch(alerts)
         dispatchSpeechEvents(speechEvents)
@@ -714,6 +721,7 @@ class VisionTestActivity : AppCompatActivity() {
         } catch (_: InterruptedException) {}
         ToolRegistry.releaseAll()
         ModelRegistry.releaseAll()
+        poseTracker.stop()
         httpClient.dispatcher.cancelAll()
         closeUdpSocket()
         udpReceiveThread?.interrupt()

@@ -5,6 +5,7 @@ import com.corsight.inference.Detection
 data class ObstacleSpeechEvent(
     val label: String,
     val urgency: ObstacleUrgency,
+    val altitude: ObstacleAltitude,
     val message: String,
     val count: Int
 )
@@ -94,10 +95,18 @@ class ObstacleAlertTracker {
             ObstacleUrgency.MEDIUM -> "请注意，正在接近$label"
             ObstacleUrgency.HIGH -> "请注意，已靠近$label"
         }
-        return ObstacleSpeechEvent(label, urgency, message, count)
+        return ObstacleSpeechEvent(label, urgency, altitude, "${altitudeSpeechPrefix(altitude)}$message", count)
     }
 
     private fun normalizeLabel(label: String): String {
         return label.trim()
+    }
+
+    private fun altitudeSpeechPrefix(altitude: ObstacleAltitude): String {
+        return when (altitude) {
+            ObstacleAltitude.GROUND -> "地面"
+            ObstacleAltitude.AIR_UNVERIFIED -> "空中暂定"
+            ObstacleAltitude.UNKNOWN -> ""
+        }
     }
 }

@@ -20,7 +20,12 @@ object ObstacleRiskAnalyzer {
         return RectF(left, top, left + zoneWidth, top + zoneHeight)
     }
 
-    fun analyze(detections: List<Detection>, imageWidth: Int, imageHeight: Int): List<ObstacleAlert> {
+    fun analyze(
+        detections: List<Detection>,
+        imageWidth: Int,
+        imageHeight: Int,
+        poseSnapshot: DevicePoseSnapshot = DevicePoseSnapshot.unavailable()
+    ): List<ObstacleAlert> {
         val zone = riskZone(imageWidth, imageHeight)
         val zoneArea = max(1f, zone.width() * zone.height())
         return detections.mapNotNull { detection ->
@@ -31,7 +36,37 @@ object ObstacleRiskAnalyzer {
                 overlap >= 0.30f -> ObstacleUrgency.LOW
                 else -> return@mapNotNull null
             }
-            ObstacleAlert(detection, urgency, overlap.coerceIn(0f, 1f), RectF(zone))
+            ObstacleAlert(
+                detection = detection,
+                urgency = urgency,
+                overlapRatio = overlap.coerceIn(0f, 1f),
+                riskZone = RectF(zone),
+                altitude = classifyAltitude(detection.box, imageHeight, poseSnapshot),
+                poseSnapshot = poseSnapshot
+            )
+        }
+    }
+
+    fun classifyAltitude(
+        box: RectF,
+        imageHeight: Int,
+        poseSnapshot: DevicePoseSnapshot = DevicePoseSnapshot.unavailable()
+    ): ObstacleAltitude {
+        val horizonY = estimateHorizonY(imageHeight, poseSnapshot)
+        return classifyAltitude(box, horizonY)
+    }
+
+    private fun estimateHorizonY(imageHeight: Int, poseSnapshot: DevicePoseSnapshot): Float {
+        // Placeholder for pitch-aware horizon projection. The current requested rule
+        // is a half-frame split; pose is captured and passed through for refinement.
+        return max(1, imageHeight) / 2f
+    }
+
+    private fun classifyAltitude(box: RectF, horizonY: Float): ObstacleAltitude {
+        return if (box.centerY() >= horizonY) {
+            ObstacleAltitude.GROUND
+        } else {
+            ObstacleAltitude.AIR_UNVERIFIED
         }
     }
 
